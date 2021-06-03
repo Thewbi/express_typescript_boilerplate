@@ -17,6 +17,29 @@ kill -9 <PID>
 
 Visit the URLs in the browser or via a REST API tool.
 
+# Usage
+
+Clone to create a new project:
+
+```
+git clone https://github.com/Thewbi/express_typescript_boilerplate.git <your_project_folder>
+```
+
+e.g.
+
+```
+git clone https://github.com/Thewbi/express_typescript_boilerplate.git todo_backend
+```
+
+remove git:
+
+```
+cd todo_backend
+rm -rf .git
+```
+
+You could also just clone the template and copy the files over manually (without the .git folder)
+
 # Creating the app
 
 ## Folder Structure
