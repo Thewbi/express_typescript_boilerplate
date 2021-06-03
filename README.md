@@ -88,7 +88,22 @@ npx tsc --init
 Adjust the tsconfig.json file
 
 ```
-...
+{
+  "compilerOptions": {
+      "incremental": true
+      "target": "es6"
+      "sourceMap": true
+      "outDir": "dist"
+      "strict": true
+      "moduleResolution": "node"
+      "allowSyntheticDefaultImports": true
+      "esModuleInterop": true
+      "experimentalDecorators": true
+      "emitDecoratorMetadata": true
+      "skipLibCheck": true
+      "forceConsistentCasingInFileNames": true
+  }
+}
 ```
 
 ## Create a index.ts
@@ -240,3 +255,9 @@ The returned value should be
     "code": 123
 }
 ```
+
+## Splitting the Application up into Routes
+
+To organize the code, move related handlers into the own files and combine them into routes. Inform express about the different routes and the handlers for those routes.
+
+Create a routes folder.

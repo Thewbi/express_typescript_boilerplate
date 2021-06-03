@@ -3,10 +3,11 @@
   "type": "module",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node --experimental-modules dist/index.js",
+    "start": "node --es-module-specifier-resolution=node --experimental-modules dist/index.js",
     "build": "tsc",
+    "clean": "tsc --clean",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
