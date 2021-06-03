@@ -52,7 +52,7 @@ Add a build and a start script to the package.json so that it looks like this:
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --experimental-modules dist/index.js",
+    "start": "node --es-module-specifier-resolution=node --experimental-modules dist/index.js",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -68,6 +68,8 @@ Add a build and a start script to the package.json so that it looks like this:
 ```
 
 **Hint:** "type": "module" in combination with the --experimental-modules is required in order to let node (starting with version 12) process the es6 module syntax (import/export) instead of using the CommonJS require syntax for modules. As typescript uses the import/export syntax, the tsc compiler will output import/export syntax into the resulting javascript files. node starting with version 12 understands this import/export syntax since it is part of ES6/ES2015 but only when enabling the experimental module loader. Another option would be to use Babel to transpile away the ES6 module syntax but since node supports it natively, the experimental suppport is used since this allows us to not add another transpiler to the setup.
+
+**Hint:** --es-module-specifier-resolution=node is required so that modules can be imported without using an explicit .js extensions during node execution. This is handy because the typescript compiler will output module imports inside the generated js files without explicitly adding .js extensions! That means when you open the generated index.js from the dist folder, you will see import statements such as import indexRouter from "./routes/indexrouter"; Without the --es-module-specifier-resolution=node parameter, these imports are not understood by node and an error is thrown during javascript execution.
 
 **Hint:** The typescript compiler tsc will only read the tsconfig.json file when it is called without parameters! When you target tsc to compile a specific file, it will ignore tsconfig.json and only read parameters from the command line! This is why the start script in the package.json above only contains the tsc command without parameters. tsc will search the nearest typescript files and compile them.
 
@@ -260,4 +262,107 @@ The returned value should be
 
 To organize the code, move related handlers into the own files and combine them into routes. Inform express about the different routes and the handlers for those routes.
 
-Create a routes folder.
+Create a routes folder and inside that folder create the files indexrouter.ts
+
+```
+import express from "express";
+
+var indexRouter = express.Router();
+
+indexRouter.get('/', function (req, res, next) {
+    res.send('ok');
+});
+
+export default indexRouter;
+```
+
+and todorouter.ts
+
+```
+import express from "express";
+
+var todoRouter = express.Router();
+
+class Result {
+    constructor(message:string, code:number) {
+        this.message = message;
+        this.code = code;
+    }
+  message: string;
+  code: number;
+};
+
+todoRouter.post('/create/real', async function (req, res, next) {
+
+    console.log(req);
+
+    let result: Result;
+    result = new Result("Your data was processed! Result:OK", 123);
+
+    res.status(200).send(result);
+});
+
+export default todoRouter;
+```
+
+Add the routers to the express app inside index.ts:
+
+```
+import express from "express";
+import indexRouter from "./routes/indexrouter";
+import todoRouter from "./routes/todorouter";
+
+const world = 'world';
+
+function hello(word: string = world): string {
+  return `Hello ${world}! `;
+}
+
+const app = express();
+
+app.use('/', indexRouter);
+app.use('/todo', todoRouter);
+
+// default port to listen on
+const port = 8080;
+
+// start the Express server
+app.listen( port, () => {
+    console.log( `server started at http://localhost:${ port }` );
+} );
+```
+
+## Testing the Progress
+
+Build and start the application
+
+**Hint:** Make sure no server is binding to the port already. Otherwise the next server will fail to bind to the port during startup!
+
+```
+npm i
+npm run build
+npm run start
+```
+
+The output should be:
+
+```
+server started at http://localhost:8080
+```
+
+Test the URLs provided via the routers this time around:
+
+http://localhost:8080/
+
+This GET route should return `ok`
+
+http://localhost:8080/todo/create/real
+
+The POST route should return
+
+```
+{
+    "message": "Your data was processed! Result:OK",
+    "code": 123
+}
+```
