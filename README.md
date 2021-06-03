@@ -1,3 +1,22 @@
+# Quickstart
+
+**Hint:** Make sure no server is binding to the port already. Otherwise the next server will fail to bind to the port during startup!
+
+```
+npm i
+npm run build
+npm run start
+```
+
+Stop the server using CTRL + c or
+
+```
+ps
+kill -9 <PID>
+```
+
+Visit the URLs in the browser or via a REST API tool.
+
 # Creating the app
 
 ## Folder Structure
@@ -140,7 +159,10 @@ app.listen( port, () => {
 
 Build and start the application
 
+**Hint:** Make sure no server is binding to the port already. Otherwise the next server will fail to bind to the port during startup!
+
 ```
+npm i
 npm run build
 npm run start
 ```
@@ -153,3 +175,10 @@ server started at http://localhost:8080
 
 Copy the URL http://localhost:8080 and paste it into a browser.
 The browser loads the page and displays `Hello world!`
+
+Stop the server using CTRL + c or
+
+```
+ps
+kill -9 <PID>
+```
