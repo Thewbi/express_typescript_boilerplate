@@ -7,13 +7,35 @@ function hello(word: string = world): string {
 }
 
 const app = express();
-const port = 8080; // default port to listen on
+
 
 // define a route handler for the default home page
 app.get( "/", ( req, res ) => {
     console.log(hello());
     res.send(hello());
 } );
+
+class Result {
+    constructor(message:string, code:number) {
+        this.message = message;
+        this.code = code;
+    }
+  message: string;
+  code: number;
+};
+
+app.post('/create/real', async function (req, res, next) {
+
+    console.log(req);
+
+    let result: Result;
+    result = new Result("Your data was processed! Result:OK", 123);
+
+    res.status(200).send(result);
+});
+
+// default port to listen on
+const port = 8080;
 
 // start the Express server
 app.listen( port, () => {

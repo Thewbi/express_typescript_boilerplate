@@ -182,3 +182,61 @@ Stop the server using CTRL + c or
 ps
 kill -9 <PID>
 ```
+
+## Adding a POST method
+
+Add code to the index.ts
+
+```
+class Result {
+    constructor(message:string, code:number) {
+        this.message = message;
+        this.code = code;
+    }
+  message: string;
+  code: number;
+};
+
+app.post('/create/real', async function (req, res, next) {
+
+    console.log(req);
+
+    let result: Result;
+    result = new Result("Your data was processed! Result:OK", 123);
+
+    res.status(200).send(result);
+});
+```
+
+This defines a Person class and a POST handler for the URL /create/real.
+Whenever a POST request arrives at that URL, a person Ted is created and returned.
+Inside the POST handler, the posted data could be processed which is not shown in this example.
+Instead of real business logic, the request is just output to the console.
+
+## Testing the Progress
+
+Build and start the application
+
+**Hint:** Make sure no server is binding to the port already. Otherwise the next server will fail to bind to the port during startup!
+
+```
+npm i
+npm run build
+npm run start
+```
+
+The output should be:
+
+```
+server started at http://localhost:8080
+```
+
+Use a REST API client to POST a raw JSON body request to the URL http://localhost:8080/create/real.
+The returned value should be
+
+```
+{
+    "message": "Your data was processed! Result:OK",
+    "code": 123
+}
+```
