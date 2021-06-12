@@ -157,7 +157,7 @@ npm run start
 The output should be:
 
 ```
-Hello world!
+server started at http://localhost:8080
 ```
 
 ## Setup express
